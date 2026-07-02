@@ -4,7 +4,7 @@
 
   <ros2_control name="GazeboSystem" type="system">
     <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
     <joint name="middle_wheel_joint_left">
       <command_interface name="velocity">
@@ -13,7 +13,6 @@
       </command_interface>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
-
     </joint>
 
     <joint name="middle_wheel_joint_right">
@@ -95,6 +94,7 @@
       <state_interface name="velocity"/>
       <state_interface name="effort"/>
     </joint>
+
     <joint name="rear_wheel_joint_R">
       <command_interface name="position">
         <param name="min">-5</param>
@@ -108,6 +108,7 @@
       <state_interface name="velocity"/>
       <state_interface name="effort"/>
     </joint>
+
     <joint name="rear_wheel_joint_L">
       <command_interface name="position">
         <param name="min">-5</param>
@@ -122,14 +123,39 @@
       <state_interface name="effort"/>
     </joint>
 
+    <joint name="rocker_bogie_joint_L_2">
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+
+    <joint name="rocker_bogie_joint_R_2">
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+
   </ros2_control>
 
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find osr_gazebo)/config/controller_velocity.yaml</parameters>
     </plugin>
   </gazebo>
 
+  <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+      <joint_name>rear_wheel_joint_right</joint_name>
+      <joint_name>rear_wheel_joint_left</joint_name>
+      <joint_name>middle_wheel_joint_right</joint_name>
+      <joint_name>middle_wheel_joint_left</joint_name>
+      <joint_name>front_wheel_joint_right</joint_name>
+      <joint_name>front_wheel_joint_left</joint_name>
+    </plugin>
+  </gazebo>
+
+<!--
     <gazebo reference="imu_link">
         <gravity>true</gravity>
         <sensor name="imu_sensor" type="imu">
@@ -137,7 +163,7 @@
         <update_rate>100</update_rate>
         <visualize>true</visualize>
         <topic>"imu"</topic>
-        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <plugin filename="libgz_ros_imu_sensor.so" name="imu_plugin">
             <topicName>imu</topicName>
             <bodyName>imu_link</bodyName>
             <updateRateHZ>100.0</updateRateHZ>
@@ -150,6 +176,7 @@
         <pose>0 0 0 0 0 0</pose>
         </sensor>
     </gazebo>
+-->
 
 
 </robot>

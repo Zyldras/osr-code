@@ -19,11 +19,15 @@
   <build_depend>tf2_geometry_msgs</build_depend>
   <build_depend>trajectory_msgs</build_depend>
 
+  <depend>tf2</depend>
+
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>effort_controllers</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>gazebo_ros2_control</exec_depend>
-  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gz_ros2_control</exec_depend>
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>ros_gz_image</exec_depend>
   <exec_depend>hardware_interface</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>launch</exec_depend>

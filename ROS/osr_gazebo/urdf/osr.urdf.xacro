@@ -17,11 +17,17 @@
     </material>
 
     <material name="brown">
-      <color rgba="0.5451 0.2706 0.0745 1"/>
+      <color rgba="0.5451 0.2706 0.0745 0.5"/>
+    </material>
+
+    <material name="red">
+        <color rgba="1 0 0 0.8"/>
     </material>
 
     <xacro:include filename="$(find osr_gazebo)/urdf/gazebo.urdf.xacro"/>
-    <xacro:include filename="$(find osr_gazebo)/urdf/insert_transmission.urdf.xacro"/>
+    <!-- <xacro:include filename="$(find osr_gazebo)/urdf/insert_transmission.urdf.xacro"/> -->
+    <xacro:include filename="$(find osr_gazebo)/urdf/lidar.urdf.xacro"/>
+    <xacro:include filename="$(find osr_gazebo)/urdf/camera.urdf.xacro"/>
 
     <link name="base_footprint"/>
     <link name="base_link">
@@ -494,6 +500,7 @@
 
     <link name="imu_link"></link>
 
+<!--
     <xacro:insert_velocity_transmission name="rear_wheel_joint_right"/>
     <xacro:insert_velocity_transmission name="rear_wheel_joint_left"/>
     <xacro:insert_velocity_transmission name="middle_wheel_joint_right"/>
@@ -505,5 +512,6 @@
     <xacro:insert_position_transmission name="front_wheel_joint_L"/>
     <xacro:insert_position_transmission name="rear_wheel_joint_R"/>
     <xacro:insert_position_transmission name="rear_wheel_joint_L"/>
+-->
 
 </robot>
