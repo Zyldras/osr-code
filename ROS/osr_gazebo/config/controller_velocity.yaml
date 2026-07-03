@@ -1,6 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
+    use_sim_time: true
 
     wheel_controller:
       type: velocity_controllers/JointGroupVelocityController
@@ -14,7 +15,6 @@ controller_manager:
 #---------------wheel_velocity_controller----------------#
 wheel_controller:
   ros__parameters:
-    type: velocity_controllers/JointGroupVelocityController
     joints:
       - middle_wheel_joint_right
       - middle_wheel_joint_left
@@ -34,7 +34,6 @@ wheel_controller:
 
 servo_controller:
   ros__parameters:
-    type: joint_trajectory_controller/JointTrajectoryController
     joints:
       - front_wheel_joint_R
       - front_wheel_joint_L

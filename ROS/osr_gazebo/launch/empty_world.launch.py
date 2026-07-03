@@ -7,7 +7,7 @@ from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, Command
 
 from launch_ros.actions import Node
 
@@ -32,12 +32,14 @@ def generate_launch_description():
                     get_package_share_directory('ros_gz_sim'), 'launch'), '/gz_sim.launch.py']),
                     launch_arguments={
                         'gz_args': ['-r -v4 ', world],
-                        'on_exit_shutdown': 'true'
+                        'on_exit_shutdown': 'true',
+                        # 'use_composition': 'true',
+                        # 'create_own_container': 'true',
                     }.items()
              )
 
     xacro_file = os.path.join(get_package_share_directory(package_name), 'urdf', 'osr.urdf.xacro')
-    robot_description_urdf = xacro.process_file(xacro_file).toxml()
+    robot_description_urdf = Command(['xacro ', xacro_file, ' use_ros2_control:=true', ' sim_mode:=true'])
 
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -72,7 +74,8 @@ def generate_launch_description():
         executable='parameter_bridge',
         output='screen',
         parameters=[{
-            'config_file': bridge_params
+            'config_file': bridge_params,
+            'qos_overrides./tf_static.publisher.durability': 'transient_local'
         }]
     )
 
@@ -84,21 +87,24 @@ def generate_launch_description():
     )
 
     # joint_state_controller
-    load_joint_state_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster'],
-        output='screen'
+    load_joint_state_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
     )
 
     # wheel_velocity_controller
-    rover_wheel_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'wheel_controller'],
-        output='screen'
+    rover_wheel_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["wheel_controller"],
     )
 
     # servo_controller
-    servo_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'servo_controller'],
-        output='screen'
+    servo_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["servo_controller"],
     )
 
     # Launch RViz
