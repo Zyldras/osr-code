@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument
+from launch.actions import ExecuteProcess, IncludeLaunchDescription, RegisterEventHandler, DeclareLaunchArgument, TimerAction
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
@@ -114,22 +114,27 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', rviz_config_file]
+        arguments=['-d', rviz_config_file],
+        parameters=[{
+            'use_sim_time': True
+        }]
     )
     
     return LaunchDescription([
     	node_controller_spawn,
+        TimerAction(period=10.0, actions=[load_joint_state_controller]),
         RegisterEventHandler(
             event_handler=OnProcessExit(
-                target_action=node_spawn_entity,
-                on_exit=[
-                    load_joint_state_controller,
-                    rover_wheel_controller,
-                    servo_controller,
-                ],
+                target_action=load_joint_state_controller,
+                on_exit=[rover_wheel_controller],
             )
         ),
-   
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=rover_wheel_controller,
+                on_exit=[servo_controller],
+            )
+        ),
         world_arg,
         gazebo,
         node_robot_state_publisher,

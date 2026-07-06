@@ -82,7 +82,7 @@ public:
             "joint_states", 1, std::bind(&Controller::jointStateCallback, this, std::placeholders::_1));
 
         imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(
-            "imu_plugin/out", 1, std::bind(&Controller::imuCallback, this, std::placeholders::_1));
+            "imu/data", 1, std::bind(&Controller::imuCallback, this, std::placeholders::_1));
 
         odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("osr/odom", 10);
 
@@ -250,7 +250,7 @@ public:
         ang_vel_corner_farthest = vel_corner_farthest / ROVER_WHEEL_RADIUS;
         ang_vel_middle_farthest = vel_middle_farthest / ROVER_WHEEL_RADIUS;
 
-        if (l > 0)  // turning left
+        if (l < 0)  // turning left
         {
             FL_data = float(ang_vel_corner_closest);
             RL_data = float(ang_vel_corner_closest);
@@ -318,14 +318,14 @@ public:
 
     void rotate_in_place(const geometry_msgs::msg::Twist::SharedPtr& msg)
     {
-        FL_data = -float(sqrt(d1*d1+d3*d3) * msg->angular.z / ROVER_WHEEL_RADIUS);
-        RL_data = -float(sqrt(d1*d1+d2*d2) * msg->angular.z / ROVER_WHEEL_RADIUS);
+        FL_data = float(sqrt(d1*d1+d3*d3) * msg->angular.z / ROVER_WHEEL_RADIUS);
+        RL_data = float(sqrt(d1*d1+d2*d2) * msg->angular.z / ROVER_WHEEL_RADIUS);
 
-        ML_data = -float(d4 * msg->angular.z / ROVER_WHEEL_RADIUS);
-        FR_data = float(sqrt(d1*d1+d3*d3) * msg->angular.z / ROVER_WHEEL_RADIUS);
+        ML_data = float(d4 * msg->angular.z / ROVER_WHEEL_RADIUS);
+        FR_data = -float(sqrt(d1*d1+d3*d3) * msg->angular.z / ROVER_WHEEL_RADIUS);
 
-        RR_data = float(d4 * msg->angular.z / ROVER_WHEEL_RADIUS);
-        MR_data = float(sqrt(d1*d1+d2*d2) * msg->angular.z / ROVER_WHEEL_RADIUS);
+        MR_data = -float(d4 * msg->angular.z / ROVER_WHEEL_RADIUS);
+        RR_data = -float(sqrt(d1*d1+d2*d2) * msg->angular.z / ROVER_WHEEL_RADIUS);
     }
 
     void publishVelocity() {
