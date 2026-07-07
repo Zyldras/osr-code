@@ -54,7 +54,8 @@ def generate_launch_description():
     node_controller_spawn = Node(
         package=package_name,
         executable='osr_controller',
-        output='screen'
+        output='screen',
+        parameters=[{'use_sim_time': True}]
     )
     
     node_spawn_entity = Node(
@@ -121,8 +122,11 @@ def generate_launch_description():
     )
     
     return LaunchDescription([
-    	node_controller_spawn,
-        TimerAction(period=10.0, actions=[load_joint_state_controller]),
+    	world_arg,
+        gazebo,
+        node_ros_gz_bridge,
+        TimerAction(period=2.0, actions=[node_robot_state_publisher, node_spawn_entity, node_ros_gz_image, node_controller_spawn, node_rviz,]),
+        TimerAction(period=5.0, actions=[load_joint_state_controller]),
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=load_joint_state_controller,
@@ -135,11 +139,4 @@ def generate_launch_description():
                 on_exit=[servo_controller],
             )
         ),
-        world_arg,
-        gazebo,
-        node_robot_state_publisher,
-        node_spawn_entity,
-        node_ros_gz_bridge,
-        node_rviz,
-        node_ros_gz_image,
     ])
