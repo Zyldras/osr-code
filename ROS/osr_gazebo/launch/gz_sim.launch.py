@@ -27,12 +27,14 @@ def generate_launch_description():
         description='World to load'
     )
 
+    gazebo_params_file = os.path.join(get_package_share_directory(package_name), 'config', 'gazebo_params.yaml')
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('ros_gz_sim'), 'launch'), '/gz_sim.launch.py']),
                     launch_arguments={
                         'gz_args': ['-r -v4 ', world],
                         'on_exit_shutdown': 'true',
+                        'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file,
                         # 'use_composition': 'true',
                         # 'create_own_container': 'true',
                     }.items()

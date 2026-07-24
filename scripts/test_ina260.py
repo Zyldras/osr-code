@@ -1,19 +1,27 @@
 import argparse
 from ina260.controller import Controller
 
+#import time
+#import board
+#import busio
+#import adafruit_ina260
+
 parser = argparse.ArgumentParser()
 addr_help = \
 """
 i2c address of your ina260 in hexadecimal. Default 0x45. You can verify that it is detected using 'sudo i2cdetect 1'.
 You should see one entry that's not empty in the table. Specify that number as the argument to this script, e.g. 0x41.
 """
-parser.add_argument("address", help=addr_help, type=lambda x: int(x, 16), nargs='?', default='0x45')
+parser.add_argument("address", help=addr_help, type=lambda x: int(x, 16), nargs='?', default='0x40')
 args = parser.parse_args()
 
 print(f"Attempting to connect INA260 at address {hex(args.address)}...\n")
 
-c = Controller(args.address)
+#c = Controller(args.address)
 try:
+    #i2c = busio.I2C(board.SCL, board.SDA)
+    #ina260 = adafruit_ina260.INA260(i2c)
+
     print("Successfully read values. They should be nonzero:\n"
           f"Current: {round(c.current(), 3)} A\nVoltage: {round(c.voltage(), 3)} V\nPower: {round(c.power(), 2)} W")
 except OSError as e:

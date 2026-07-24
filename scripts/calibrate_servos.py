@@ -27,7 +27,16 @@ if __name__ == '__main__':
 
     kit = ServoKit(channels=16)
     sleep(0.1)
+    F = 50                  #Hz
+    T = 1_000_000/F         #20ms
+    MIN_PULSE = 500         #us
+    MAX_PULSE = 2500        #us
+    ACTUATION_RANGE = 300   #degres
+    
+    kit.frequency = F
     kit.servo[args.motor_index].actuation_range = 300
     kit.servo[args.motor_index].set_pulse_width_range(500, 2500)
-    kit.servo[args.motor_index].angle = args.target_angle
+    #kit.servo[args.motor_index].angle = args.target_angle*178/300
+    kit._pca.channels[args.motor_index].duty_cycle = int(( MIN_PULSE + (args.target_angle/ACTUATION_RANGE) * (MAX_PULSE-MIN_PULSE) ) / T * 65535) #
+    print(kit._pca.frequency)
     print(f"Servo motor at channel {args.motor_index} was set to {args.target_angle}")

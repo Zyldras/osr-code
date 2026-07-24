@@ -57,6 +57,12 @@ class ServoWrapper(Node):
             self.kit.servo[servo_id].set_pulse_width_range(*self.pulse_width_range)
 
     def corner_cmd_cb(self, cmd: CommandCorner):
+        F = 50                  #Hz
+        T = 1_000_000/F         #20ms
+        MIN_PULSE = 500         #us
+        MAX_PULSE = 2500        #us
+        ACTUATION_RANGE = 300   #degres
+
         self.log.debug(f"Received corner command message: {cmd}")
         if not self.kit:
             self.log.error("ServoKit not instantiated yet, dropping cmd", throttle_duration_sec=5)
@@ -74,7 +80,8 @@ class ServoWrapper(Node):
             # limit to operating range of servo
             angle = max(min(angle, self.servo_actuation_range), 0)
             # send to motor
-            self.kit.servo[ind].angle = angle
+            #self.kit.servo[ind].angle = angle
+            self.kit._pca.channels[ind].duty_cycle = int(( MIN_PULSE + (angle/ACTUATION_RANGE) * (MAX_PULSE-MIN_PULSE) ) / T * 65535)
 
     def publish_encoder_estimate(self):
         """
