@@ -84,7 +84,8 @@ def generate_launch_description():
                 {"scale_angular_turbo.yaw": 3.88},  # scale to apply to angular speed, in rad/s: scale_linear_turbo / min_radius
                 {"scale_linear_turbo.x": 1.75},  # scale to apply to linear speed, in m/s
                 {"enable_button": 7},  # ! xbox=7 ! which button to press to enable movement
-                {"enable_turbo_button": 6}  # ! xbox=6 ! -1 to disable turbo
+                {"enable_turbo_button": 6},  # ! xbox=6 ! -1 to disable turbo
+                {"require_enable_button": True}
             ],
             remappings=[
                 ('/cmd_vel', '/cmd_vel_intuitive')
@@ -100,6 +101,7 @@ def generate_launch_description():
             emulate_tty=True,
             respawn=True,
             parameters=[
+                {"deadzone": 0.05},
                 {"autorepeat_rate": 5.0},
                 {"device_id": 0},  # ! default = 0 ! This might be different on your computer. Run `ls -l /dev/input/event*`. If you have event1, put 1.
             ]        

@@ -25,6 +25,9 @@ def generate_launch_description():
             {"enable_turbo_button": 9},  # ! xbox=6 ! -1 to disable turbo
             {"require_enable_button": True}
         ],
+        remappings=[
+            ('/cmd_vel', '/cmd_vel_intuitive')
+        ]
     )
 
     node_joy = Node(

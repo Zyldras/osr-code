@@ -111,7 +111,7 @@ def generate_launch_description():
     )
 
     # Launch RViz
-    rviz_config_file = os.path.join(get_package_share_directory(package_name), 'rviz/rviz_settings2.rviz')
+    rviz_config_file = os.path.join(get_package_share_directory(package_name), 'rviz/rviz_settings_gz.rviz')
     node_rviz = Node(
         package='rviz2',
         executable='rviz2',
