@@ -59,6 +59,26 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': True}]
     )
+
+    # osr_params = os.path.join(
+    #     get_package_share_directory('osr_bringup'),
+    #     'config',
+    #     'osr_params.yaml'
+    # )
+
+    # enable_odom = DeclareLaunchArgument('enable_odometry', default_value='false')
+    # pub_tf = DeclareLaunchArgument('publish_transform', default_value='false')
+
+    # node_rover = Node(
+    #     package=package_name,
+    #     executable='rover_gz.py',
+    #     output='screen',
+    #     parameters=[
+    #         osr_params,
+    #         {'enable_odometry': LaunchConfiguration('enable_odometry'),
+    #         'publish_transform': LaunchConfiguration('publish_transform')},
+    #         {'use_sim_time': True}]
+    # )
     
     node_spawn_entity = Node(
         package='ros_gz_sim',
@@ -124,6 +144,8 @@ def generate_launch_description():
     )
     
     return LaunchDescription([
+        # enable_odom,
+        # pub_tf,
     	world_arg,
         gazebo,
         node_ros_gz_bridge,

@@ -22,6 +22,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
+# find_package(ament_cmake_python REQUIRED)
+# find_package(rclpy REQUIRED)
 
 install(DIRECTORY
   launch
@@ -50,6 +52,11 @@ install(
   DESTINATION
     lib/${PROJECT_NAME}
 )
+
+# install(PROGRAMS
+#   src/rover_gz.py
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
