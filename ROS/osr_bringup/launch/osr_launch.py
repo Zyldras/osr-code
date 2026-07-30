@@ -34,9 +34,6 @@ def generate_launch_description():
         )
     )
     ld.add_action(
-        DeclareLaunchArgument('enable_odometry', default_value='false')
-    )
-    ld.add_action(
         Node(
             package='osr_control',
             executable='servo_control',
@@ -44,14 +41,14 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
             respawn=True,
-            parameters=[{'centered_pulse_widths': [147, 165, 156, 152]}]  # pulse width where the corner motors are in their default position, see rover_bringup.md.
+            parameters=[{'centered_pulse_widths': [147, 165, 160, 152]}]  # pulse width where the corner motors are in their default position, see rover_bringup.md.
         )
     )
     ld.add_action(
         DeclareLaunchArgument('enable_odometry', default_value='false')
     )
     ld.add_action(
-        DeclareLaunchArgument('publish_transform', default_value='false')
+        DeclareLaunchArgument('publish_transform', default_value='true')
     )
     ld.add_action(
         Node(

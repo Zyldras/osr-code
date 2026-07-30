@@ -56,7 +56,7 @@ class Rover(Node):
             self.odometry = Odometry()
             self.odometry.header.stamp = self.get_clock().now().to_msg()
             self.odometry.header.frame_id = "odom"
-            self.odometry.child_frame_id = "base_link"
+            self.odometry.child_frame_id = "base_footprint"
             self.odometry.pose.pose.orientation.w = 1.
         self.curr_positions = {}
         self.curr_velocities = {}
@@ -74,9 +74,26 @@ class Rover(Node):
         if self.should_calculate_odom:
             self.odometry_pub = self.create_publisher(Odometry, "/odom", 2)
             self.tf_pub = tf2_ros.TransformBroadcaster(self)
+        if self.should_publish_transform:
+            self.tf_static_pub = tf2_ros.StaticTransformBroadcaster(self)
+            self.make_transforms()
 
         self.corner_cmd_pub = self.create_publisher(CommandCorner, "/cmd_corner", 1)
         self.drive_cmd_pub = self.create_publisher(CommandDrive, "/cmd_drive", 1)
+
+    def make_transforms(self):
+        if self.should_publish_transform:
+            transform_msg = TransformStamped()
+            transform_msg.header.frame_id = "base_footprint"
+            transform_msg.child_frame_id = "base_link"
+            transform_msg.header.stamp = self.get_clock().now().to_msg()
+            self.tf_static_pub.sendTransform(transform_msg)
+
+            transform_msg = TransformStamped()
+            transform_msg.header.frame_id = "base_link"
+            transform_msg.child_frame_id = "laser"
+            transform_msg.header.stamp = self.get_clock().now().to_msg()
+            self.tf_static_pub.sendTransform(transform_msg)
 
     def cmd_cb(self, twist_msg, intuitive=False):
         """
@@ -156,7 +173,7 @@ class Rover(Node):
             if self.should_publish_transform: 
                 transform_msg = TransformStamped()
                 transform_msg.header.frame_id = "odom"
-                transform_msg.child_frame_id = "base_link"
+                transform_msg.child_frame_id = "base_footprint"
                 transform_msg.header.stamp = now.to_msg()
                 transform_msg.transform.translation.x = self.odometry.pose.pose.position.x
                 transform_msg.transform.translation.y = self.odometry.pose.pose.position.y
