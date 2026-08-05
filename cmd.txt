@@ -17,14 +17,12 @@ ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true params_file:=./
 
     --- Reel ---
 
+    Sur RPi
 ros2 launch rplidar_ros rplidar_a1_launch.py
 
 ros2 launch rf2o_laser_odometry rf2o_laser_odometry.launch.py
 
-ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 base_footprint base_link
-
-ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 base_link laser
-
+    Sur PC
 ros2 launch slam_toolbox online_async_launch.py params_file:=./src/osr-code/config/mapper_params_online_async.yaml
 
-ros2 launch nav2_bringup navigation_launch.py params_file:=./src/osr-code/config/nav2_params.yaml
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false params_file:=./src/osr-code/config/nav2_params.yaml

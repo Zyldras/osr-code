@@ -129,4 +129,15 @@ def generate_launch_description():
     #     )
     # )
 
+    lidar = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('rplidar_ros'), 'launch'), '/rplidar_a1_launch.py']),
+    )
+    ld.add_action(lidar)
+    rf2o = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('rf2o_laser_odometry'), 'launch'), '/rf2o_laser_odometry.launch.py']),
+    )
+    ld.add_action(rf2o)
+
     return ld
