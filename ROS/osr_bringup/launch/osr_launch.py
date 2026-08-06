@@ -1,8 +1,9 @@
 import os
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -42,6 +43,11 @@ def generate_launch_description():
             emulate_tty=True,
             respawn=True,
             parameters=[{'centered_pulse_widths': [147, 165, 160, 152]}]  # pulse width where the corner motors are in their default position, see rover_bringup.md.
+            # indices du tableau :
+            # 0 = back_right
+            # 1 = front_right
+            # 2 = front_left
+            # 3 = back_left
         )
     )
     ld.add_action(
@@ -98,7 +104,7 @@ def generate_launch_description():
             emulate_tty=True,
             respawn=True,
             parameters=[
-                {"deadzone": 0.05},
+                {"deadzone": 0.1},
                 {"autorepeat_rate": 5.0},
                 {"device_id": 0},  # ! default = 0 ! This might be different on your computer. Run `ls -l /dev/input/event*`. If you have event1, put 1.
             ]        
