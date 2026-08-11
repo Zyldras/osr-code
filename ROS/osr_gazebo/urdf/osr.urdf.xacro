@@ -29,6 +29,7 @@
     <xacro:include filename="$(find osr_gazebo)/urdf/joints_control.xacro" />
     <xacro:include filename="$(find osr_gazebo)/urdf/lidar.xacro" />
     <xacro:include filename="$(find osr_gazebo)/urdf/camera.xacro" />
+    <xacro:include filename="$(find osr_gazebo)/urdf/imu.xacro" />
 
     <link name="base_footprint" />
     <link name="base_link">
@@ -505,14 +506,5 @@
     </xacro:macro>
     <xacro:wheel prefix="left" dir="1" origin="0" prefix_1="L" />
     <xacro:wheel prefix="right" dir="-1" origin="3.14" prefix_1="R" />
-
-    <joint name="imu_joint" type="fixed">
-        <parent link="base_link" />
-        <child link="imu_link" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-
-    <link name="imu_link"></link>
-
 
 </robot>
