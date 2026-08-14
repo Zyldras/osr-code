@@ -21,7 +21,7 @@ def generate_launch_description():
                 "inverted": False,
                 "angle_compensate": True,
                 "scan_mode": "Standard",
-                "scan_frequency": 5.0,
+                "scan_frequency": 10.0,
                 "use_sim_time": False,
             }
         ],
@@ -40,7 +40,8 @@ def generate_launch_description():
                 "base_frame_id": "base_footprint",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
-                "freq": 5.0,
+                "freq": 10.0,
+                "use_sim_time": False,
             }
         ],
     )
@@ -48,6 +49,6 @@ def generate_launch_description():
     return LaunchDescription(
         [
             TimerAction(period=1.0, actions=[node_lidar]),
-            TimerAction(period=5.0, actions=[node_rf2o]),
+            TimerAction(period=3.0, actions=[node_rf2o]),
         ]
     )

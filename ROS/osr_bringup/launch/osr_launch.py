@@ -149,14 +149,19 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            arg_enable_odom,
-            arg_publish_tf,
-            node_roboclaw,
-            node_servo,
-            node_rover,
-            node_teleop,
-            node_joy,
-            node_ina,
+            TimerAction(
+                period=5.0,
+                actions=[
+                    arg_enable_odom,
+                    arg_publish_tf,
+                    node_roboclaw,
+                    node_servo,
+                    node_rover,
+                    node_teleop,
+                    node_joy,
+                ],
+            ),
+            # node_ina,
             launch_lidar,
         ]
     )
